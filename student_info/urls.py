@@ -12,6 +12,7 @@ urlpatterns = patterns(
     (r'^student/delete/$', 'student_delete'),
     (r'^student/add/$', 'student_add_page'),
     (r'^student/add/save/$', 'student_add_save'),
+    (r'^student/detail/$', 'student_detail'),
 
     (r'^teacher/page/$', 'teacher_page'),
     (r'^teacher/$', 'teacher_list'),

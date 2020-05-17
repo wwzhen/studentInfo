@@ -152,12 +152,12 @@
         });
 
         $("#search").on('click', function () {
-            console.log("????")
             $("#table2_demo1").DataTable().ajax.reload();
         });
     });
 
     function showDetail(id) {
+        window.location.href = site_url + 'student/detail?id=' + id
     }
 
     function editStudentInfo(id) {

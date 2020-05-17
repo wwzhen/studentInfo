@@ -103,6 +103,14 @@ def student_detail(request):
     :param request:
     :return:
     """
+    student_id = request.GET.get('id')
+    if student_id:
+        student_model = Student.objects.get(id=student_id)
+        student_dict = student_model.to_dict()
+        student_dict['class_name'] = student_model.class_info.sn
+        student_dict['profession_name'] = student_model.profession.name
+        student_dict['dorm_sn'] = student_model.dorm.sn
+        return render_mako_context(request, "/home_application/detail.html", {"student": student_dict})
     return render_mako_context(request, "/home_application/detail.html")
 
 
