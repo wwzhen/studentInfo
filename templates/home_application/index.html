@@ -11,46 +11,50 @@
     <div class="bk-panel mb20">
         <div class="bk-panel-body p25">
             <div class="row">
-                <form class="form-inline">
-                    <div class="form-group mr5">
-                        <label for="exampleInputName2">用户名：</label>
-                        <input type="text" class="form-control" id="name" placeholder="请输入用户名">
-                    </div>
+                <div class="king-block-content">
+                    <form class="form-inline ml10">
+                        <div class="form-group mr5">
+                            <label for="exampleInputName2">姓名：</label>
+                            <input type="text" class="form-control" id="name" placeholder="请输入用户名">
+                        </div>
+                        <div class="form-group mr5">
+                            <label for="exampleInputEmail2">学号：</label>
+                            <input type="email" class="form-control" id="sn" placeholder="请输入学号">
+                        </div>
+                        <div class="form-group mr5">
+                            <label for="exampleInputEmail2">班级：</label>
+                            <select name="" id="class_id" class="form-control" style="width: 100px">
+                                <option class="form-control" value="">全部</option>
+                                %for classInfo in classes:
+                                <option class="form-control" value="${classInfo['id']}">${classInfo['sn']}</option>
+                                %endfor
+                            </select>
+                        </div>
+                        <div class="form-group mr5">
+                            <label for="exampleInputEmail2">专业：</label>
+                            <select name="" id="profession_id" class="form-control" style="width: 100px">
+                                <option class="form-control" value="">全部</option>
+                                %for profession in professions:
+                                <option value="${profession['id']}">${profession['name']}</option>
+                                %endfor
+                            </select>
+                        </div>
+                        <div class="form-group mr5">
+                            <label for="exampleInputEmail2">性别：</label>
+                            <select name="" id="sex" class="form-control" style="width: 100px">
+                                <option class="form-control" value="">全部</option>
+                                <option value="man">男</option>
+                                <option value="woman">女</option>
+                            </select>
+                        </div>
 
-                    <div class="form-group mr5">
-                        <label for="exampleInputEmail2">学号：</label>
-                        <input type="email" class="form-control" id="sn" placeholder="请输入学号">
-                    </div>
-                    <div class="form-group mr5">
-                        <label for="exampleInputEmail2">班级：</label>
-                        <select name="" id="class_id" class="form-control">
-                            %for classInfo in classes:
-                            <option value="${classInfo['id']}">${classInfo['sn']}</option>
-                            %endfor
-                        </select>
-                    </div>
-                    <div class="form-group mr5">
-                        <label for="exampleInputEmail2">专业：</label>
-                        <select name="" id="profession_id" class="form-control">
-                            %for profession in professions:
-                            <option value="${profession['id']}">${profession['name']}</option>
-                            %endfor
-                        </select>
-                    </div>
-                    <div class="form-group mr5">
-                        <label for="exampleInputEmail2">性别：</label>
-                        <select name="" id="class_id" class="form-control">
-                            <option value="man">男</option>
-                            <option value="woman">女</option>
-                        </select>
-                    </div>
-
-                    <button type="button" class="king-btn king-info" onclick="search()">查询</button>
-                </form>
+                        <button type="button" class="king-btn king-info" id="search">查询</button>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="row mt10 ml10">
-            <button type="button" class="king-btn king-info" onclick="studentAdd()">添加</button>
+            <button type="button" class="king-btn king-info ml10" onclick="studentAdd()">添加</button>
         </div>
         <div class="king-block king-block-bordered">
             <div class="king-block-content">
@@ -76,8 +80,6 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        //table2_demo1_js_start
-        //表格(DataTables)-1，html数据源
         var language = {
             search: '搜索：',
             lengthMenu: "每页显示 _MENU_ 记录",
@@ -103,7 +105,13 @@
             ajax: {
                 url: site_url + 'student/',
                 type: 'POST',
-                data: {},
+                data: function (d) {
+                    d.name = $("#name").val();
+                    d.sn = $("#sn").val();
+                    d.classInfo = $("#class_id").val();
+                    d.profession = $("#profession_id").val();
+                    d.sex = $("#sex").val()
+                },
                 dataSrc: function (res) {
                     return JSON.parse(res.message);
                 },
@@ -136,7 +144,7 @@
                 {
                     data: "id",
                     render: function (data, type, row) {
-                        return "<a href='javascript:void(0)'; onclick=editStudentInfo(" + data + ")>编辑</a> | <a href='javascript:void(0)'; onclick=deleteStudentInfo(" + data + ")>删除</a>"
+                        return "<a href='javascript:void(0)'; onclick=editStudentInfo('" + data + "')>编辑</a> | <a href='javascript:void(0)'; onclick=deleteStudentInfo('" + data + "')>删除</a>"
 
                     }
                 }
@@ -144,6 +152,8 @@
         });
 
         $("#search").on('click', function () {
+            console.log("????")
+            $("#table2_demo1").DataTable().ajax.reload();
         });
     });
 
@@ -156,10 +166,6 @@
 
     function studentAdd() {
         window.location.href = site_url + "student/add/";
-    }
-
-    function search() {
-        $("#table2_demo1").DataTable().ajax.reload();
     }
 
     function deleteStudentInfo(id) {

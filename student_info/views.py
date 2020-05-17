@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 
+from django.db.models import Q
+
 import constant
 from common.mymako import render_mako_context, render_json
 from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course
@@ -67,7 +69,24 @@ def student_list(request):
     :param request:
     :return:
     """
-    student_models = Student.objects.filter(delflag=False)
+    params = request.POST
+    q_query = Q(delflag=False)
+    name = params.get("name")
+    if name:
+        q_query = q_query & Q(name__contains=name)
+    sn = params.get("sn")
+    if sn:
+        q_query = q_query & Q(sn__contains=sn)
+    class_id = params.get("class_id")
+    if class_id:
+        q_query = q_query & Q(class_id=class_id)
+    profession_id = params.get("profession_id")
+    if profession_id:
+        q_query = q_query & Q(profession_id=profession_id)
+    sex = params.get('sex')
+    if sex:
+        q_query = q_query & Q(sex=sex)
+    student_models = Student.objects.filter(q_query)
     students = list()
     for student in student_models:
         student_dict = student.to_dict()
