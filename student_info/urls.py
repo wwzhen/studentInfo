@@ -4,6 +4,9 @@ from django.conf.urls import patterns
 
 urlpatterns = patterns(
     'student_info.views',
+    (r'^overview/$', 'overview'),
+    (r'^overview/student/chart/$', 'overview_student_chart'),
+
     (r'^$', 'home'),
     (r'^student/$', 'student_list'),
     (r'^student/delete/$', 'student_delete'),

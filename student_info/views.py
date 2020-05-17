@@ -6,6 +6,40 @@ from common.mymako import render_mako_context, render_json
 from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course
 
 
+def overview(request):
+    return render_mako_context(request, '/home_application/overview.html')
+
+
+def overview_student_chart(request):
+    data = {
+        "code": 0,
+        "result": True,
+        "messge": "success",
+        "data": {
+            "title": "",
+            "series": [{
+                "value": 335,
+                "name": u"直接访问"
+            }, {
+                "value": 310,
+                "name": u"邮件营销"
+            }, {
+                "value": 234,
+                "name": u"联盟广告"
+
+            }, {
+                "value": 135,
+                "name": "视频广告"
+
+            }, {
+                "value": 1548,
+                "name": u"搜索引擎"
+            }]
+        }
+    }
+    return render_json(data)
+
+
 def home(request):
     """
     首页
