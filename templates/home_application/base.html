@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>学生管理系统</title>
+    <link href="https://magicbox.bk.tencent.com/static_api/v3/assets/bootstrap-3.3.4/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://magicbox.bk.tencent.com/static_api/v3/assets/bk-icon-2.0/iconfont.css" rel="stylesheet">
+    <link href="https://magicbox.bk.tencent.com/static_api/v3/bk/css/bk.css" rel="stylesheet">
+    <link href="https://magicbox.bk.tencent.com/static_api/v3/bk/css-pro/bk.css" rel="stylesheet">
+    <link href="https://magicbox.bk.tencent.com/static_api/v3/assets/fontawesome/css/font-awesome.css" rel="stylesheet">
+    <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+        var app_id = "${APP_ID}";
+        var site_url = "${SITE_URL}";	  // app的url前缀,在ajax调用的时候，应该加上该前缀
+        var static_url = "${STATIC_URL}"; // 静态资源前缀
+    </script>
+    <script src="${STATIC_URL}js/csrftoken.js?v=${STATIC_VERSION}" type="text/javascript"></script>
+    <link href="${STATIC_URL}css/common.css" rel="stylesheet">
+    <link href="${STATIC_URL}css/index.css" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="bk-horz-nav bk-horz-nav-min">
+    <div class="bk-nav-logo fl">
+        <img src="${STATIC_URL}img/logo.jpg">
+        太原理工大学
+    </div>
+    <div class="bk-nav-user fr">
+        <span class="mr5">admin</span>
+        <img src="https://magicbox.bk.tencent.com/static_api/v3/components_pro/horizontal_nav1/images/avatar.png">
+    </div>
+    <ul class="bk-nav-links fr">
+        <li class="">
+            <a href="javascript:;">设置</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="bk-layout bk-layout-has-sidebar" style="height:calc(100% - 60px)">
+    <div class="bk-sidebar slide-close">
+        <div class="slide-switch">
+            <i class="icon bk-icon icon-dedent f14"></i>
+        </div>
+        <div class="nav-list">
+            <ul>
+                <li class="active">
+                    <a href="/">
+                      <span class="icon-box">
+                        <i class="fa fa-graduation-cap"></i>
+                      </span>
+                        <span class="nav-name">学生管理</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/class_info/page/">
+                      <span class="icon-box">
+                        <i class="fa fa-home"></i>
+                      </span>
+                        <span class="nav-name">班级管理</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/teacher/page/">
+                      <span class="icon-box">
+                        <i class="fa fa-users"></i>
+                      </span>
+                        <span class="nav-name">教师管理</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="copyright">
+            <p>Copyright &copy; 2020-2025 xxx.</p>
+        </div>
+    </div>
+
+    <%block name='content'></%block>
+</div>
+
+<script src="${STATIC_URL}js/common.js"></script>
+<script src="${STATIC_URL}js/index.js"></script>
+<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/datatables-1.10.7/jquery.dataTables.js"
+        type="text/javascript"></script>
+<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/datatables-1.10.7/dataTables.bootstrap.js"
+        type="text/javascript"></script>
+</body>
+
+</html>

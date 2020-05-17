@@ -3,7 +3,7 @@ import json
 
 import constant
 from common.mymako import render_mako_context, render_json
-from student_info.models import Student, Profession, ClassInfo, Dorm
+from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course
 
 
 def home(request):
@@ -116,3 +116,67 @@ def student_add_save(request):
     student_info_model = Student(**model_dict)
     student_info_model.save()
     return render_json({"result": True})
+
+
+def teacher_page(request):
+    return render_mako_context(request, '/home_application/teacher.html')
+
+
+def teacher_list(request):
+    teacher_models = Teacher.objects.filter(delflag=False)
+    teachers = list()
+    for teacher_model in teacher_models:
+        teacher_dict = teacher_model.to_dict()
+        teacher_dict["duty_name"] = teacher_model.duty.name
+        teacher_dict["course_name"] = teacher_model.course.name
+        teachers.append(teacher_dict)
+    return render_json(json.dumps(teachers))
+
+
+def teacher_add_page(request):
+    duty_models = Duty.objects.filter(delflag=False)
+    course_models = Course.objects.filter(delflag=False)
+    duties = map(lambda x: x.to_dict(), duty_models)
+    courses = map(lambda x: x.to_dict(), course_models)
+    return render_mako_context(request, '/home_application/teacher_add.html',
+                               {"duties": duties,
+                                "courses": courses})
+
+
+def teacher_add_save(request):
+    params = request.POST
+    model_dict = dict()
+    model_dict['name'] = params.get("name")
+    model_dict['sn'] = params.get("sn")
+    model_dict['job_title'] = params.get("jobTitle")
+    duty_id = params.get("duty")
+    if duty_id:
+        model_dict['duty'] = Duty.objects.get(id=duty_id)
+    course_id = params.get("course")
+    if course_id:
+        model_dict['course'] = Course.objects.get(id=course_id)
+    teacher_model = Teacher(**model_dict)
+    teacher_model.save()
+    return render_json({"result": True})
+
+
+def teacher_delete(request):
+    teacher_id = request.POST.get('id')
+    teacher_model = Teacher.objects.get(id=teacher_id)
+    teacher_model.delflag = True
+    teacher_model.save()
+    return render_json({"result": True})
+
+
+def class_page(request):
+    return render_mako_context(request, "/home_application/class_info.html")
+
+
+def class_info_list(request):
+    class_models = ClassInfo.objects.filter(delflag=False)
+    classes = list()
+    for class_model in class_models:
+        class_info_dict = class_model.to_dict()
+        class_info_dict['profession_name'] = class_model.profession.name
+        classes.append(class_info_dict)
+    return render_json(json.dumps(classes))

@@ -1,0 +1,103 @@
+<%inherit file="base.html"/>
+<%block name="content">
+<div class="page-content">
+    <div class="king-page-topbar pl20 pr20">
+        <ul class="breadcrumb king-breadcrumb pl0 bg-transparent">
+            <li>教师管理</li>
+            <li>基本信息</li>
+            <li class="active">教师添加</li>
+        </ul>
+    </div>
+    <div class="bk-panel mb20">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="king-block king-block-bordered">
+                    <div class="king-block-header king-gray-light">
+                        <h3 class="king-block-title">添加教师信息</h3>
+                    </div>
+                    <div class="king-block-content">
+                        <form class="form-horizontal" method="POST">
+                            <div class="form-group">
+                                <label for="inputCount3" class="col-sm-3 control-label">姓名：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="name"
+                                           placeholder="输入姓名">
+                                </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputCount3" class="col-sm-3 control-label">教师编号：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="sn"
+                                           placeholder="输入教师编号">
+                                </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">职称：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="job_title"
+                                           placeholder="职称">
+                                </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">职务：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="duty" class="form-control">
+                                        %for duty in duties:
+                                        <option value="${duty['id']}">${duty['name']}</option>
+                                        %endfor
+                                    </select>
+                                </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">课程：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="course" class="form-control">
+                                        %for course in courses:
+                                        <option value="${course['id']}">${course['name']}</option>
+                                        %endfor
+                                    </select>
+                                </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-7 col-sm-offset-3">
+                                    <input type="button" class="king-btn king-success mr10"
+                                           onclick="teacherAddSubmit()" value="提交"/>
+                                    <input type="reset" class="king-btn king-default" onclick="backToTeacherList()"
+                                           value="取消"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function teacherAddSubmit() {
+        $.ajax({
+            url: site_url + 'teacher/add/save/',
+            type: 'POST',
+            data: {
+                name: $("#name").val().trim(),
+                sn: $("#sn").val().trim(),
+                jobTitle: $("#job_title").val().trim(),
+                course: $("#course").val(),
+                duty: $("#duty").val()
+            },
+            success: function (res) {
+                window.location.href = site_url + 'teacher/page/'
+            }
+        })
+    }
+
+    function backToTeacherList() {
+        window.location.href = site_url + 'teacher/page/'
+    }
+</script>
+</%block>

@@ -1,285 +1,180 @@
-<!DOCTYPE html>
-<html lang="en">
+<%inherit file="base.html"/>
 
-<head>
-    <meta charset="UTF-8">
-    <title>首页</title>
-    <link href="https://magicbox.bk.tencent.com/static_api/v3/assets/bootstrap-3.3.4/css/bootstrap.min.css"
-          rel="stylesheet">
-    <link href="https://magicbox.bk.tencent.com/static_api/v3/assets/bk-icon-2.0/iconfont.css" rel="stylesheet">
-    <link href="https://magicbox.bk.tencent.com/static_api/v3/bk/css/bk.css" rel="stylesheet">
-    <link href="https://magicbox.bk.tencent.com/static_api/v3/bk/css-pro/bk.css" rel="stylesheet">
-    <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/js/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript">
-        var app_id = "${APP_ID}";
-        var site_url = "${SITE_URL}";	  // app的url前缀,在ajax调用的时候，应该加上该前缀
-        var static_url = "${STATIC_URL}"; // 静态资源前缀
-    </script>
-    <script src="${STATIC_URL}js/csrftoken.js?v=${STATIC_VERSION}" type="text/javascript"></script>
-    <link href="${STATIC_URL}css/common.css" rel="stylesheet">
-    <link href="${STATIC_URL}css/index.css" rel="stylesheet">
-</head>
-
-<body>
-
-<nav class="bk-horz-nav bk-horz-nav-min">
-    <div class="bk-nav-logo fl">
-        <img src="${STATIC_URL}img/logo.jpg">
-        太原理工大学
+<%block name="content">
+<div class="page-content">
+    <div class="king-page-topbar pl20 pr20">
+        <ul class="breadcrumb king-breadcrumb pl0 bg-transparent">
+            <li>学生管理</li>
+            <li>基本信息</li>
+            <li class="active">学生添加</li>
+        </ul>
     </div>
-    <div class="bk-nav-user fr">
-        <span class="mr5">admin</span>
-        <img src="https://magicbox.bk.tencent.com/static_api/v3/components_pro/horizontal_nav1/images/avatar.png">
-    </div>
-    <ul class="bk-nav-links fr">
-        <li class="">
-            <a href="javascript:;">设置</a>
-        </li>
-    </ul>
-</nav>
-
-<div class="bk-layout bk-layout-has-sidebar" style="height:calc(100% - 60px)">
-    <div class="bk-sidebar slide-close">
-        <div class="slide-switch">
-            <i class="icon bk-icon icon-dedent f14"></i>
-        </div>
-        <div class="nav-list">
-            <ul>
-                <li>
-                    <a href="javascript:;">
-                      <span class="icon-box">
-                        <i class="bk-icon icon-plus-square"></i>
-                      </span>
-                        <span class="nav-name">学生管理</span>
-                    </a>
-                    <div class="flex-subnavs">
-                        <a href="javascript:;"><i></i>基本信息</a>
-                        <a href="javascript:;"><i></i>助学金信息</a>
-                        <a href="javascript:;"><i></i>奖学金信息</a>
+    <div class="bk-panel mb20">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="king-block king-block-bordered">
+                    <div class="king-block-header king-gray-light">
+                        <h3 class="king-block-title">添加学生信息</h3>
                     </div>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                      <span class="icon-box">
-                        <i class="bk-icon icon-plus-square"></i>
-                      </span>
-                        <span class="nav-name">班级管理</span>
-                    </a>
-                    <div class="flex-subnavs">
-                        <a href="javascript:;"><i></i>班级信息</a>
-                        <a href="javascript:;"><i></i>助学金信息</a>
-                        <a href="javascript:;"><i></i>奖学金信息</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="javascript:;">
-                      <span class="icon-box">
-                        <i class="bk-icon icon-plus-square"></i>
-                      </span>
-                        <span class="nav-name">教师管理</span>
-                    </a>
-                    <div class="flex-subnavs">
-                        <a href="javascript:;"><i></i>基本信息</a>
-                        <a href="javascript:;"><i></i>助学金信息</a>
-                        <a href="javascript:;"><i></i>奖学金信息</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <!--div class="copyright">
-            <p>Copyright &copy; 2012-2017 蓝鲸智云.</p>
-            <span>All Rights Reserved.</span>
-        </div -->
-    </div>
-
-    <div class="page-content">
-        <div class="king-page-topbar pl20 pr20">
-            <ul class="breadcrumb king-breadcrumb pl0 bg-transparent">
-                <li>学生管理</li>
-                <li>基本信息</li>
-                <li class="active">学生添加</li>
-            </ul>
-        </div>
-        <div class="bk-panel mb20">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="king-block king-block-bordered">
-                        <div class="king-block-header king-gray-light">
-                            <ul class="king-block-options">
-                                <li>
-                                    <button type="button"><i class="fa fa-cog"></i></button>
-                                </li>
-                            </ul>
-                            <h3 class="king-block-title">添加学生信息</h3>
-                        </div>
-                        <div class="king-block-content">
-                            <form class="form-horizontal" method="POST">
-                                <div class="form-group">
-                                    <label for="inputCount3" class="col-sm-3 control-label">姓名：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="name"
-                                               placeholder="输入学生姓名">
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                    <div class="king-block-content">
+                        <form class="form-horizontal" method="POST">
+                            <div class="form-group">
+                                <label for="inputCount3" class="col-sm-3 control-label">姓名：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="name"
+                                           placeholder="输入学生姓名">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputCount3" class="col-sm-3 control-label">学号：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="sn"
-                                               placeholder="输入学生姓名">
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputCount3" class="col-sm-3 control-label">学号：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="sn"
+                                           placeholder="输入学生学号">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label">性别：</label>
-                                    <div class="col-sm-7">
-                                        <select name="" id="sex" class="form-control">
-                                            <option value="man">男</option>
-                                            <option value="woman">女</option>
-                                        </select>
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">性别：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="sex" class="form-control">
+                                        <option value="man">男</option>
+                                        <option value="woman">女</option>
+                                    </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label">班级：</label>
-                                    <div class="col-sm-7">
-                                        <select name="" id="class" class="form-control">
-                                            %for class_info in classes:
-                                            <option value="${class_info['id']}">${class_info['sn']}</option>
-                                            %endfor
-                                        </select>
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">班级：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="class" class="form-control">
+                                        %for class_info in classes:
+                                        <option value="${class_info['id']}">${class_info['sn']}</option>
+                                        %endfor
+                                    </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label">专业：</label>
-                                    <div class="col-sm-7">
-                                        <select name="" id="profession" class="form-control">
-                                            %for profession in professions:
-                                            <option value="${profession['id']}">${profession['name']}</option>
-                                            %endfor
-                                        </select>
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">专业：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="profession" class="form-control">
+                                        %for profession in professions:
+                                        <option value="${profession['id']}">${profession['name']}</option>
+                                        %endfor
+                                    </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label">宿舍：</label>
-                                    <div class="col-sm-7">
-                                        <select name="" id="dorm" class="form-control">
-                                            %for dorm in dorms:
-                                            <option value="${dorm['id']}">${dorm['sn']}</option>
-                                            %endfor
-                                        </select>
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">宿舍：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="dorm" class="form-control">
+                                        %for dorm in dorms:
+                                        <option value="${dorm['id']}">${dorm['sn']}</option>
+                                        %endfor
+                                    </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label">出生年月：</label>
-                                    <div class="col-sm-7">
-                                        <input type="date" id="birthday" class="form-control">
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">出生年月：</label>
+                                <div class="col-sm-7">
+                                    <input type="date" id="birthday" class="form-control">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">证件号码：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="id_card" placeholder="">
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">证件号码：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="id_card" placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">电话：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="phone" placeholder="">
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">电话：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="phone" placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-3 control-label">政治面貌：</label>
-                                    <div class="col-sm-7">
-                                        <select name="" id="politics" class="form-control">
-                                            <option value="党员">党员</option>
-                                            <option value="团员">团员</option>
-                                            <option value="群众">群众</option>
-                                        </select>
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">政治面貌：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="politics" class="form-control">
+                                        <option value="党员">党员</option>
+                                        <option value="团员">团员</option>
+                                        <option value="群众">群众</option>
+                                    </select>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-3">国籍：</label>
-                                    <div class="col-sm-7">
-                                        <select name="" id="country" class="form-control">
-                                            %for country in countries:
-                                            <option value="${country['cn']}">${country['cn']}</option>
-                                            %endfor
-                                        </select>
-                                    </div>
-                                    <span class="text-danger mt5 fl">*</span>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">国籍：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="country" class="form-control">
+                                        %for country in countries:
+                                        <option value="${country['cn']}">${country['cn']}</option>
+                                        %endfor
+                                    </select>
                                 </div>
-                                <div class="form-group has-feedback">
-                                    <label class="control-label col-sm-3" for="introduction">民族：</label>
-                                    <div class="col-sm-7">
-                                        <select name="" id="nation" class="form-control">
-                                            %for nation in nations:
-                                            <option value="${nation['value']}">${nation['value']}</option>
-                                            %endfor
-                                        </select>
-                                    </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label class="control-label col-sm-3" for="introduction">民族：</label>
+                                <div class="col-sm-7">
+                                    <select name="" id="nation" class="form-control">
+                                        %for nation in nations:
+                                        <option value="${nation['value']}">${nation['value']}</option>
+                                        %endfor
+                                    </select>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-3">籍贯：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" id="hometown" class="form-control">
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">籍贯：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="hometown" class="form-control">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">紧急联系人：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="emergency_phone" placeholder="">
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">紧急联系人：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="emergency_phone" placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">家庭住址：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="address" placeholder="">
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">家庭住址：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="address" placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">qq：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="qq" placeholder="">
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">qq：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="qq" placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-3 control-label">邮箱：</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="email" placeholder="">
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">邮箱：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="email" placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-sm-7 col-sm-offset-3">
-                                        <input type="button" class="king-btn king-success mr10"
-                                               onclick="studentAddSubmit()" value="提交"/>
-                                        <input type="reset" class="king-btn king-default" onclick="backToStudentList()"
-                                               value="取消"/>
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-7 col-sm-offset-3">
+                                    <input type="button" class="king-btn king-success mr10"
+                                           onclick="studentAddSubmit()" value="提交"/>
+                                    <input type="reset" class="king-btn king-default" onclick="backToStudentList()"
+                                           value="取消"/>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
-<script src="${STATIC_URL}js/common.js"></script>
-<script src="${STATIC_URL}js/index.js"></script>
-<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/datatables-1.10.7/jquery.dataTables.js"
-        type="text/javascript"></script>
-<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/datatables-1.10.7/dataTables.bootstrap.js"
-        type="text/javascript"></script>
 <script type="text/javascript">
 
     function backToStudentList() {
@@ -316,6 +211,5 @@
     }
 
 </script>
-</body>
+</%block>
 
-</html>
