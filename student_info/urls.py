@@ -6,6 +6,8 @@ urlpatterns = patterns(
     'student_info.views',
     (r'^overview/$', 'overview'),
     (r'^overview/student/chart/$', 'overview_student_chart'),
+    (r'^overview/student/politics/chart/$', 'get_overview_politics_chart'),
+    (r'^overview/student/country/chart/$', 'get_overview_country_chart'),
 
     (r'^$', 'home'),
     (r'^student/$', 'student_list'),

@@ -13,29 +13,84 @@ def overview(request):
 
 
 def overview_student_chart(request):
+    student_models = Student.objects.filter(delflag=False)
+    man_count = 0
+    woman_count = 0
+    for student in student_models:
+        if student.sex == "man":
+            man_count += 1
+        if student.sex == "woman":
+            woman_count += 1
     data = {
         "code": 0,
         "result": True,
         "messge": "success",
         "data": {
-            "title": "",
+            "title": "男女学生比例",
             "series": [{
-                "value": 335,
-                "name": u"直接访问"
+                "value": man_count,
+                "name": u"男"
             }, {
-                "value": 310,
-                "name": u"邮件营销"
-            }, {
-                "value": 234,
-                "name": u"联盟广告"
+                "value": woman_count,
+                "name": u"女"
+            }]
+        }
+    }
+    return render_json(data)
 
-            }, {
-                "value": 135,
-                "name": "视频广告"
 
+def get_overview_politics_chart(request):
+    student_models = Student.objects.filter(delflag=False)
+    dang_count = 0
+    tuan_count = 0
+    qun_count = 0
+    for student in student_models:
+        if student.politics == u"党员":
+            dang_count += 1
+        if student.politics == u"团员":
+            tuan_count += 1
+        if student.politics == u"群众":
+            qun_count += 1
+    data = {
+        "code": 0,
+        "result": True,
+        "messge": "success",
+        "data": {
+            "xAxis": [{
+                "type": "category",
+                "data": [u"党员", u"团员", u"群众"]
+            }],
+            "series": [{
+                "name": u"学生成分",
+                "type": "bar",
+                "data": [dang_count, tuan_count, qun_count]
+            }]
+        }
+    }
+    return render_json(data)
+
+
+def get_overview_country_chart(request):
+    student_models = Student.objects.filter(delflag=False)
+    china_count = 0
+    out_count = 0
+    for student in student_models:
+        if student.country == u"中国":
+            china_count += 1
+        else:
+            out_count += 1
+    data = {
+        "code": 0,
+        "result": True,
+        "messge": "success",
+        "data": {
+            "title": u"留学生比例",
+            "series": [{
+                "value": china_count,
+                "name": u"中国学生"
             }, {
-                "value": 1548,
-                "name": u"搜索引擎"
+                "value": out_count,
+                "name": u"留学生"
             }]
         }
     }
