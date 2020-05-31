@@ -5,7 +5,8 @@ from django.db.models import Q
 
 import constant
 from common.mymako import render_mako_context, render_json
-from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course, StudentActivityAttachment
+from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course, StudentActivityAttachment, \
+    Activity, Discipline
 
 
 def overview(request):
@@ -203,12 +204,18 @@ def student_add_page(request):
         classes = map(lambda x: x.to_dict(), class_models)
         dorm_models = Dorm.objects.filter(delflag=False)
         dorms = map(lambda x: x.to_dict(), dorm_models)
+        activity_models = Activity.objects.filter(delflag=False)
+        activities = map(lambda x: x.to_dict(), activity_models)
+        discipline_models = Discipline.objects.filter(delflag=False)
+        disciplines = map(lambda x: x.to_dict(), discipline_models)
         return render_mako_context(request, '/home_application/student_add.html',
                                    {"countries": countries,
                                     "nations": nations,
                                     "professions": professions,
                                     "classes": classes,
                                     "dorms": dorms,
+                                    "activities": activities,
+                                    "disciplines": disciplines,
                                     "student_info": student_info})
 
     countries = constant.country
@@ -219,12 +226,18 @@ def student_add_page(request):
     classes = map(lambda x: x.to_dict(), class_models)
     dorm_models = Dorm.objects.filter(delflag=False)
     dorms = map(lambda x: x.to_dict(), dorm_models)
+    activity_models = Activity.objects.filter(delflag=False)
+    activities = map(lambda x: x.to_dict(), activity_models)
+    discipline_models = Discipline.objects.filter(delflag=False)
+    disciplines = map(lambda x: x.to_dict(), discipline_models)
     return render_mako_context(request, '/home_application/student_add.html',
                                {"countries": countries,
                                 "nations": nations,
                                 "professions": professions,
                                 "classes": classes,
-                                "dorms": dorms
+                                "dorms": dorms,
+                                "activities": activities,
+                                "disciplines": disciplines,
                                 })
 
 
