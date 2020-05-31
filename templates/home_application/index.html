@@ -120,14 +120,21 @@
                 {
                     data: "name",
                     render: function (data, type, row) {
-                        return "<a href='javascript:void(0); onclick=showDetail(" + row['id'] + ")'>" + row['name'] + "</a>"
+                        return "<a onclick=showDetail('"+ row["id"] +"')>" + row['name'] + "</a>"
                     }
                 },
                 {
                     data: "sn"
                 },
                 {
-                    data: 'sex'
+                    data: 'sex',
+                    render: function(data, type, row) {
+                        if (data === "man") {
+                            return "<span>男</span>"
+                        } else if(data === "woman") {
+                            return "<span>女</span>"
+                        }
+                    }
                 },
                 {
                     data: "profession_name"
@@ -161,7 +168,7 @@
     }
 
     function editStudentInfo(id) {
-
+        window.location.href = site_url + "student/add/?id=" + id
     }
 
     function studentAdd() {

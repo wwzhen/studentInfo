@@ -5,7 +5,7 @@ from django.db.models import Q
 
 import constant
 from common.mymako import render_mako_context, render_json
-from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course
+from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course, StudentActivityAttachment
 
 
 def overview(request):
@@ -165,6 +165,11 @@ def student_detail(request):
         student_dict['class_name'] = student_model.class_info.sn
         student_dict['profession_name'] = student_model.profession.name
         student_dict['dorm_sn'] = student_model.dorm.sn
+        student_activities_models = StudentActivityAttachment.objects.filter(delflag=False,student_id=student_id)
+        student_activities = list()
+        for s in student_activities_models:
+            student_activities.append(s.activity.name)
+        student_dict['activities'] = student_activities
         return render_mako_context(request, "/home_application/detail.html", {"student": student_dict})
     return render_mako_context(request, "/home_application/detail.html")
 
@@ -183,6 +188,29 @@ def student_delete(request):
 
 
 def student_add_page(request):
+    if 'id' in request.GET:
+        student_id = request.GET.get('id')
+    else:
+        student_id = None
+    if student_id:
+        student_model = Student.objects.get(id=student_id)
+        student_info = student_model.to_dict()
+        countries = constant.country
+        nations = constant.nations
+        profession_models = Profession.objects.filter(delflag=False)
+        professions = map(lambda x: x.to_dict(), profession_models)
+        class_models = ClassInfo.objects.filter(delflag=False)
+        classes = map(lambda x: x.to_dict(), class_models)
+        dorm_models = Dorm.objects.filter(delflag=False)
+        dorms = map(lambda x: x.to_dict(), dorm_models)
+        return render_mako_context(request, '/home_application/student_add.html',
+                                   {"countries": countries,
+                                    "nations": nations,
+                                    "professions": professions,
+                                    "classes": classes,
+                                    "dorms": dorms,
+                                    "student_info": student_info})
+
     countries = constant.country
     nations = constant.nations
     profession_models = Profession.objects.filter(delflag=False)
@@ -225,7 +253,8 @@ def student_add_save(request):
     model_dict['country'] = params.get("country")
     model_dict['nation'] = params.get("nation")
     model_dict['hometown'] = params.get("hometown")
-    model_dict['emergency_phone'] = params.get("emergencyPhone")
+    model_dict['father_phone'] = params.get("father_phone")
+    model_dict['mother_phone'] = params.get("mother_phone")
     model_dict['address'] = params.get("address")
     model_dict['qq'] = params.get("qq")
     model_dict['email'] = params.get('email')

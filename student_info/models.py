@@ -99,11 +99,23 @@ class Dorm(BaseModel):
     sn = models.CharField(db_column="sn", max_length=64, verbose_name=u"宿舍号")
 
 
+class Discipline(BaseModel):
+    sn = models.CharField(db_column="sn", max_length=64, null=True, blank=True, verbose_name=u"惩罚代码")
+    discipline_time = models.DateTimeField(db_column="time", verbose_name=u"惩罚时间")
+
+
+class Activity(BaseModel):
+    sn = models.CharField(db_column="sn", max_length=64, null=True, blank=True, verbose_name=u"活动编号")
+    name = models.CharField(db_column="name", max_length=64, verbose_name=u"活动名称")
+    activity_time = models.DateTimeField(db_column="time", verbose_name=u"活动时间")
+
+
 class Student(BaseModel):
     sn = models.CharField(db_column="sn", max_length=64, verbose_name=u"学号")
     name = models.CharField(db_column="name", max_length=64, verbose_name=u"姓名")
     class_info = models.ForeignKey(ClassInfo)
     profession = models.ForeignKey(Profession)
+    punishment = models.ForeignKey(Discipline, null=True, blank=True)
     dorm = models.ForeignKey(Dorm)
     birthday = models.DateTimeField(db_column="birthday", max_length=64, null=True, blank=True, verbose_name=u"出生年月")
     sex = models.CharField(db_column='sex', choices=SEX_CHOICES, default='man', verbose_name=u"性别", max_length=16)
@@ -113,8 +125,10 @@ class Student(BaseModel):
     country = models.CharField(db_column="country", max_length=64, null=True, blank=True, verbose_name=u"国籍")
     nation = models.CharField(db_column="nation", max_length=64, null=True, blank=True, verbose_name=u"民族")
     phone = models.CharField(db_column="phone", max_length=64, null=True, blank=True, verbose_name=u"联系电话")
-    emergency_phone = models.CharField(db_column="emergency_phone", max_length=64, null=True, blank=True,
-                                       verbose_name=u"紧急联系人")
+    father_phone = models.CharField(db_column="father_phone", max_length=64, null=True, blank=True,
+                                    verbose_name=u"父亲联系电话")
+    mother_phone = models.CharField(db_column="mother_phone", max_length=64, null=True, blank=True,
+                                    verbose_name=u"母亲联系方式")
     address = models.CharField(db_column="address", max_length=64, null=True, blank=True, verbose_name=u"家庭住址")
     qq = models.CharField(db_column="qq", null=True, max_length=64, blank=True, verbose_name=u"QQ")
     email = models.CharField(db_column="email", max_length=64, null=True, blank=True, verbose_name=u"email")
@@ -130,3 +144,8 @@ class BursaryStudentAttachment(BaseModel):
     bursary = models.ForeignKey(Bursary)
     student = models.ForeignKey(Student)
     release_time = models.DateTimeField(db_column="release_time", verbose_name=u"发放时间")
+
+
+class StudentActivityAttachment(BaseModel):
+    student = models.ForeignKey(Student)
+    activity = models.ForeignKey(Activity)

@@ -3,7 +3,7 @@
 <%block name="content">
 <div class="page-content" id="background">
     <div class="bk-panel mb20">
-        <ul>
+        <ul class="col-md-12">
             <li><span>姓名:</span><span>${student['name']}</span></li>
             <li><span>学号:</span><span>${student['sn']}</span></li>
             <li><span>班级:</span><span>${student['class_name']}</span></li>
@@ -17,10 +17,14 @@
             <li><span>国家:</span><span>${student['country']}</span></li>
             <li><span>民族:</span><span>${student['country']}</span></li>
             <li><span>电话:</span><span>${student['phone']}</span></li>
-            <li><span>紧急联系电话:</span><span>${student['emergency_phone']}</span></li>
             <li><span>家庭住址:</span><span>${student['address']}</span></li>
+            <li><span>父亲电话:</span><span>${student['father_phone']}</span></li>
+            <li><span>母亲电话:</span><span>${student['mother_phone']}</span></li>
             <li><span>QQ:</span><span>${student['qq']}</span></li>
             <li><span>Email:</span><span>${student['email']}</span></li>
+            %for activity_name in student['activities']:
+            <li><span/>活动:<span>${activity_name}</span> </li>
+            %endfor
         </ul>
         <form class="form-horizontal">
             <div class="form-group">

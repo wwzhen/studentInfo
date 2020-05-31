@@ -9,12 +9,12 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student_info', '0001_initial'),
+        ('student_info', '0002_auto_20200531_1934'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name='Activity',
             fields=[
                 ('id', models.CharField(primary_key=True, db_column=b'id', default=uuid.uuid4, serialize=False, editable=False, max_length=36, verbose_name='ID')),
                 ('desc', models.TextField(null=True, verbose_name='\u8bf4\u660e', db_column=b'desc', blank=True)),
@@ -23,16 +23,12 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(auto_now=True, verbose_name='\u6700\u540e\u66f4\u65b0\u65f6\u95f4', db_column=b'updated')),
                 ('creator', models.CharField(max_length=64, null=True, verbose_name='\u521b\u5efa\u4eba', db_column=b'creator', blank=True)),
                 ('modifier', models.CharField(max_length=64, null=True, verbose_name='\u6700\u540e\u66f4\u65b0\u4eba', db_column=b'modifier', blank=True)),
-                ('user_name', models.CharField(max_length=64)),
-                ('user_password', models.CharField(max_length=64)),
+                ('sn', models.CharField(max_length=64, null=True, verbose_name='\u6d3b\u52a8\u7f16\u53f7', db_column=b'sn', blank=True)),
+                ('name', models.CharField(max_length=64, verbose_name='\u6d3b\u52a8\u540d\u79f0', db_column=b'name')),
+                ('activity_time', models.DateTimeField(verbose_name='\u6d3b\u52a8\u65f6\u95f4', db_column=b'time')),
             ],
             options={
                 'abstract': False,
             },
-        ),
-        migrations.AddField(
-            model_name='student',
-            name='sex',
-            field=models.CharField(default=b'man', max_length=16, verbose_name='\u6027\u522b', db_column=b'sex', choices=[(b'man', b'\xe7\x94\xb7'), (b'woman', b'\xe5\xa5\xb3'), (b'other', b'\xe5\x85\xb6\xe4\xbb\x96')]),
         ),
     ]
