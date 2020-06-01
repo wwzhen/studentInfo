@@ -13,88 +13,58 @@ def overview(request):
     return render_mako_context(request, '/home_application/overview.html')
 
 
-def overview_student_chart(request):
+def overview_chart(request):
+    data = dict()
     student_models = Student.objects.filter(delflag=False)
+    data['student_counts'] = student_models.count()
     man_count = 0
     woman_count = 0
-    for student in student_models:
-        if student.sex == "man":
-            man_count += 1
-        if student.sex == "woman":
-            woman_count += 1
-    data = {
-        "code": 0,
-        "result": True,
-        "messge": "success",
-        "data": {
-            "title": "男女学生比例",
-            "series": [{
-                "value": man_count,
-                "name": u"男"
-            }, {
-                "value": woman_count,
-                "name": u"女"
-            }]
-        }
-    }
-    return render_json(data)
-
-
-def get_overview_politics_chart(request):
-    student_models = Student.objects.filter(delflag=False)
     dang_count = 0
     tuan_count = 0
     qun_count = 0
-    for student in student_models:
-        if student.politics == u"党员":
-            dang_count += 1
-        if student.politics == u"团员":
-            tuan_count += 1
-        if student.politics == u"群众":
-            qun_count += 1
-    data = {
-        "code": 0,
-        "result": True,
-        "messge": "success",
-        "data": {
-            "xAxis": [{
-                "type": "category",
-                "data": [u"党员", u"团员", u"群众"]
-            }],
-            "series": [{
-                "name": u"学生成分",
-                "type": "bar",
-                "data": [dang_count, tuan_count, qun_count]
-            }]
-        }
-    }
-    return render_json(data)
-
-
-def get_overview_country_chart(request):
-    student_models = Student.objects.filter(delflag=False)
     china_count = 0
     out_count = 0
+
     for student in student_models:
+        if student.sex == 'man':
+            man_count += 1
+        else:
+            woman_count += 1
+        if student.politics == u'党员':
+            dang_count += 1
+        elif student.politics == u"团员":
+            tuan_count += 1
+        else:
+            qun_count += 1
         if student.country == u"中国":
             china_count += 1
         else:
             out_count += 1
-    data = {
-        "code": 0,
-        "result": True,
-        "messge": "success",
-        "data": {
-            "title": u"留学生比例",
-            "series": [{
-                "value": china_count,
-                "name": u"中国学生"
-            }, {
-                "value": out_count,
-                "name": u"留学生"
-            }]
+    data['student_sex_chart'] = [
+        {
+            'value': man_count,
+            'category': u'男'
+        },
+        {
+            'value': woman_count,
+            'category': u'女'
         }
-    }
+    ]
+    data['student_politics_chart'] = [dang_count, tuan_count, qun_count]
+    data['student_country_chart'] = [
+        {
+            'value': china_count,
+            'name': u'中国'
+        },
+        {
+            'value': out_count,
+            'name': u'留学生'
+        }
+    ]
+    teacher_models = Teacher.objects.filter(delflag=False)
+    data['teacher_counts'] = teacher_models.count()
+    data['course_counts'] = Course.objects.filter(delflag=False).count()
+    data['class_counts'] = ClassInfo.objects.filter(delflag=False).count()
     return render_json(data)
 
 
@@ -166,7 +136,7 @@ def student_detail(request):
         student_dict['class_name'] = student_model.class_info.sn
         student_dict['profession_name'] = student_model.profession.name
         student_dict['dorm_sn'] = student_model.dorm.sn
-        student_activities_models = StudentActivityAttachment.objects.filter(delflag=False,student_id=student_id)
+        student_activities_models = StudentActivityAttachment.objects.filter(delflag=False, student_id=student_id)
         student_activities = list()
         for s in student_activities_models:
             student_activities.append(s.activity.name)
@@ -244,6 +214,7 @@ def student_add_page(request):
 def student_add_save(request):
     params = request.POST
     model_dict = dict()
+    student_id = params.get('id')
     model_dict['name'] = params.get("name")
     model_dict['sn'] = params.get("sn")
     model_dict['sex'] = params.get("sex")
@@ -271,8 +242,12 @@ def student_add_save(request):
     model_dict['address'] = params.get("address")
     model_dict['qq'] = params.get("qq")
     model_dict['email'] = params.get('email')
-    student_info_model = Student(**model_dict)
-    student_info_model.save()
+    if student_id:
+        student_info_model = Student.objects.filter(id=student_id)
+        student_info_model.update(**model_dict)
+    else:
+        student_info_model = Student(**model_dict)
+        student_info_model.save()
     return render_json({"result": True})
 
 

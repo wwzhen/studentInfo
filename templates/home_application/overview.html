@@ -3,192 +3,238 @@
 <%block name="content">
 
 <div class="page-content" id="background">
-    <div class="col-md-4">
-        <div id="chart1" style="height:500px;padding:10px;"></div>
-    </div>
-    <div class="col-md-4">
-        <div id="chart2" style="height:500px;padding:10px;"></div>
-    </div>
-    <div class="col-md-4">
-        <div id="chart3" style="height:500px;padding:10px;"></div>
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row data-panel">
+                <div class="col-lg-3 col-md-6">
+                    <div class="king-widget2">
+                        <div class="king-widget-content p20 bg-info">
+                            <div class="king-counter king-counter-lg">
+                                <div class="king-counter-label text-uppercase f16">学生</div>
+                                <div class="king-counter-number-group">
+                                    <span class="king-counter-number white" id="studentCount"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="king-widget2">
+                        <div class="king-widget-content p20 bg-info">
+                            <div class="king-counter king-counter-lg">
+                                <div class="king-counter-label text-uppercase f16">老师</div>
+                                <div class="king-counter-number-group">
+                                    <span class="king-counter-number white" id="teacherCount"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="king-widget2">
+                        <div class="king-widget-content p20 bg-info">
+                            <div class="king-counter king-counter-lg">
+                                <div class="king-counter-label text-uppercase f16">课程</div>
+                                <div class="king-counter-number-group">
+                                    <span class="king-counter-number white" id="courseCount"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="king-widget2">
+                        <div class="king-widget-content p20 bg-info">
+                            <div class="king-counter king-counter-lg">
+                                <div class="king-counter-label text-uppercase f16">班级</div>
+                                <div class="king-counter-number-group">
+                                    <span class="king-counter-number white" id="classCount"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row charts">
+                <div class="col-md-6">
+                    <div class="king-block king-block-bordered mb30">
+                        <div class="king-block-header">
+                            <h3 class="king-block-title">假数据</h3>
+                        </div>
+                        <div class="king-block-content">
+                            <div class="chart" id="chartA"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="king-block king-block-bordered mb30">
+                        <div class="king-block-header">
+                            <h3 class="king-block-title">男女学生比例</h3>
+                        </div>
+                        <div class="king-block-content">
+                            <div class="chart" id="chartC"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="king-block king-block-bordered mb30">
+                        <div class="king-block-header">
+                            <h3 class="king-block-title">假数据</h3>
+                        </div>
+                        <div class="king-block-content">
+                            <div class="chart" id="chartB"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="king-block king-block-bordered mb30">
+                        <div class="king-block-header">
+                            <h3 class="king-block-title">党员比例</h3>
+                        </div>
+                        <div class="king-block-content">
+                            <div class="chart" id="chartD"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.row -->
+        </div>
     </div>
 </div>
 <script src="https://magicbox.bk.tencent.com/static_api/v3/assets/js/jquery-1.10.2.min.js"></script>
-<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/echarts-2.0/echarts-all.js"></script>
+<!--script src="https://magicbox.bk.tencent.com/static_api/v3/assets/echarts-2.0/echarts-all.js"></script -->
+<script src="https://magicbox.bk.tencent.com/static_api/v3/assets/kendoui-2015.2.624/js/kendo.all.min.js"></script>
+
 <script type="text/javascript">
     //chart4_demo1_js_start
-    function createEPieChart(conf) {
-        var myChart = echarts.init(document.getElementById(conf.selector));
-        var aLegend = [];
-        var series = conf.data.series;
-        for (var i = 0; i < series.length; i++) {
-            aLegend[i] = series[i].name;
-        }
-        // 填入数据
-        myChart.setOption({
-            title: {
-                text: conf.data.title,
-                subtext: '',
-                x: 'center'
+    $(function () {
+        getChartData()
+    });
+
+    function getChartData() {
+        $.ajax({
+            url: '/overview/chart/',
+            type: 'get',
+            success: function (res) {
+                console.log(res)
+                setInfo(res)
+                drawChart(res)
+            }
+        })
+    }
+
+    function setInfo(data) {
+        $("#studentCount").html(data['student_counts'])
+        $("#teacherCount").html(data['teacher_counts'])
+        $("#courseCount").html(data['course_counts'])
+        $("#classCount").html(data['class_counts'])
+    }
+
+    function drawChart(data) {
+        $('#chartA').kendoChart({
+            seriesDefaults: {
+                type: 'line'
             },
             legend: {
-                // x : 'left',
-                y: 'bottom',
-                data: aLegend
+                position: "bottom"
             },
+            theme: 'bootstrap',
             tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                visible: true,
+                template: "#= series.name # #= value #"
             },
-            calculable: true,
+            categoryAxis: {
+                categories: ['07-20', '07-21', '07-22', '07-23', '07-24', '07-25', '07-26'],
+                majorGridLines: {
+                    visible: false
+                }
+            },
             series: [{
-                // 根据名字对应到相应的系列
-                name: '访问来源',
-                type: conf.chartType,
-                data: series
+                name: "测试数据1",
+                data: [0, 2, 4, 5, 0, 1, 0]
+            }, {
+                name: "测试数据2",
+                data: [0, 1, 0, 0, 2, 0, 0]
+            }, {
+                name: "测试数据3",
+                data: [4, 0, 2, 1, 5, 0, 1]
+            }]
+        });
+        $('#chartB').kendoChart({
+            legend: {
+                position: "bottom"
+            },
+            theme: 'bootstrap',
+            seriesDefaults: {
+                type: 'area',
+                area: {
+                    line: {
+                        style: "smooth"
+                    }
+                }
+            },
+            categoryAxis: {
+                categories: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                majorGridLines: {
+                    visible: false
+                }
+            },
+            series: [{
+                name: '项目一',
+                data: [10, 12, 21, 54, 260, 830, 710]
+            },
+                {
+                    name: '项目二',
+                    data: [30, 182, 434, 791, 390, 30, 10]
+                },
+                {
+                    name: '项目三',
+                    data: [1320, 1132, 601, 234, 120, 90, 20]
+                }
+            ]
+        });
+        $('#chartC').kendoChart({
+            legend: {
+                position: "bottom"
+            },
+            theme: 'bootstrap',
+            seriesDefaults: {
+                labels: {
+                    template: "#= category # - #= kendo.format('{0:P}', percentage)#",
+                    position: "outsideEnd",
+                    visible: true,
+                    background: "transparent"
+                }
+            },
+            series: [{
+                name: '男女学生比例',
+                type: 'pie',
+                data: data['student_sex_chart']
+            }]
+        });
+        $('#chartD').kendoChart({
+            seriesDefaults: {
+                type: 'column'
+            },
+            legend: {
+                position: "bottom"
+            },
+            theme: 'bootstrap',
+            tooltip: {
+                visible: true,
+            },
+            categoryAxis: {
+                categories: ['党员', '团员', '群众'],
+                majorGridLines: {
+                    visible: false
+                }
+            },
+            series: [{
+                name: '',
+                data: data['student_politics_chart']
             }]
         });
     }
-
-    function initEPieChart(conf) {
-        $.ajax({
-            url: conf.url,
-            type: 'GET',
-            dataType: conf.dataType,
-            success: function (res) {
-                //获取数据成功
-                if (res.result) {
-                    var data = res.data;
-                    createEPieChart({
-                        selector: conf.containerId, // 图表容器
-                        data: data, // 图表数据
-                        chartType: conf.chartType
-                    });
-                }
-            }
-        });
-    }
-
-    function createEBarChart(conf) {
-        var myChart = echarts.init(document.getElementById(conf.selector));
-        var legendData = [];//存放变量的name
-        for (var i = 0; i < conf.data.series.length; i++) {
-            legendData.push(conf.data.series[i].name);
-        }
-        myChart.setOption({
-            legend: {
-                y: 'bottom',
-                data: legendData
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            calculable: true,
-            yAxis: [
-                {
-                    type: 'value',
-                    splitArea: {show: true}
-                }
-            ],
-            xAxis: conf.data.xAxis,
-            series: conf.data.series
-        })
-    }
-
-    function initEBarChart(conf) {
-        $.ajax({
-            url: conf.url,
-            type: 'GET',
-            dataType: conf.dataType,
-            success: function (res) {
-                //获取数据成功
-                if (res.result) {
-                    createEBarChart({
-                        selector: conf.containerId, // 图表容器
-                        data: res.data, // 图表数据
-                    });
-                }
-            }
-        })
-    }
-
-    function createEStandLineChart(conf) {
-        var myChart = echarts.init(document.getElementById(conf.selector));
-        var legendData = []
-        for (var i = 0; i < conf.data.series.length; i++) {
-            legendData.push(conf.data.series[i].name)
-        }
-        myChart.setOption({
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                y: 'bottom',
-                data: legendData
-            },
-            calculable: true,
-            xAxis: [
-                {
-                    type: 'category',
-                    data: conf.data.xAxis
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    splitArea: {show: true}
-                }
-            ],
-            series: conf.data.series
-        });
-    }
-
-    function initEStandLineChart(conf) {
-        $.ajax({
-            url: conf.url,
-            type: 'GET',
-            dataType: conf.dataType,
-            success: function (res) {
-                //获取数据成功
-                if (res.result) {
-                    createEStandLineChart({
-                        selector: conf.containerId, // 图表容器
-                        data: res.data, // 图表数据
-                    });
-                }
-            }
-        })
-    }
-
-    function setBackGroundImg() {
-        let backDiv = document.getElementById("contentDiv");
-        let imgUrl = static_url + "img/background2.jpg";
-        backDiv.style.backgroundImage = "url('" + imgUrl + "')";
-        backDiv.style.backgroundRepeat = "no-repeat";
-        backDiv.style.backgroundSize = "100%";
-    }
-
-    $(function () {
-        // setBackGroundImg();
-        initEPieChart({
-            url: '/overview/student/chart/',
-            dataType: 'json',
-            containerId: 'chart1',
-            chartType: 'pie'
-        });
-        initEBarChart({
-            url: '/overview/student/politics/chart/',
-            dataType: 'json',
-            containerId: 'chart2',
-            chartType: 'line'
-        });
-        initEPieChart({
-            url: '/overview/student/country/chart/',
-            dataType: 'json',
-            containerId: 'chart3',
-            chartType: 'pie'
-        });
-    });
-    //chart4_demo1_js_end
 </script>
 </%block>
