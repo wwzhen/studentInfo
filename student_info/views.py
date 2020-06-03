@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from datetime import datetime
 
 from django.db.models import Q
 
@@ -178,6 +179,7 @@ def student_add_page(request):
         activities = map(lambda x: x.to_dict(), activity_models)
         discipline_models = Discipline.objects.filter(delflag=False)
         disciplines = map(lambda x: x.to_dict(), discipline_models)
+        student_info['birthday'] = student_info['birthday'][0:10]
         return render_mako_context(request, '/home_application/student_add.html',
                                    {"countries": countries,
                                     "nations": nations,
@@ -230,8 +232,7 @@ def student_add_save(request):
     dorm_id = params.get("dorm")
     if dorm_id:
         model_dict['dorm'] = Dorm.objects.get(id=dorm_id)
-    model_dict['birthday'] = params.get('birthday')
-    model_dict['id_card'] = params.get("idCard")
+    model_dict['birthday'] = datetime.strptime(params.get('birthday'), '%Y-%m-%d')
     model_dict['phone'] = params.get("phone")
     model_dict['politics'] = params.get("politics")
     model_dict['country'] = params.get("country")
@@ -240,6 +241,7 @@ def student_add_save(request):
     model_dict['father_phone'] = params.get("father_phone")
     model_dict['mother_phone'] = params.get("mother_phone")
     model_dict['address'] = params.get("address")
+    model_dict['id_card'] = params.get("id_card")
     model_dict['qq'] = params.get("qq")
     model_dict['email'] = params.get('email')
     if student_id:
