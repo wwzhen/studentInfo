@@ -22,4 +22,7 @@ urlpatterns = patterns(
 
     (r'^class_info/$', 'class_info_list'),
     (r'^class_info/page/$', 'class_page'),
+
+    (r'^scholarship/page/$', 'scholarship_page'),
+    (r'^scholarship/$', 'scholarship_list'),
 )

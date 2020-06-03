@@ -7,7 +7,7 @@ from django.db.models import Q
 import constant
 from common.mymako import render_mako_context, render_json
 from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course, StudentActivityAttachment, \
-    Activity, Discipline
+    Activity, Discipline, Scholarship
 
 
 def overview(request):
@@ -315,3 +315,16 @@ def class_info_list(request):
         class_info_dict['profession_name'] = class_model.profession.name
         classes.append(class_info_dict)
     return render_json(json.dumps(classes))
+
+
+def scholarship_page(request):
+    return render_mako_context(request, "/home_application/scholarship.html")
+
+
+def scholarship_list(request):
+    scholarship_models = Scholarship.objects.filter(delflag=False)
+    scholarships = list()
+    for scholarship in scholarship_models:
+        teacher_dict = scholarship.to_dict()
+        scholarships.append(teacher_dict)
+    return render_json(json.dumps(scholarships))
