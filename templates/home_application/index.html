@@ -68,6 +68,7 @@
                         <th>班级</th>
                         <th>电话</th>
                         <th>宿舍</th>
+                        <th>重点学生</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -147,6 +148,16 @@
                 },
                 {
                     data: "dorm_sn"
+                },
+                {
+                    data: "is_focus",
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "是"
+                        } else {
+                            return "否"
+                        }
+                    }
                 },
                 {
                     data: "id",

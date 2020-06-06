@@ -1,0 +1,76 @@
+<%inherit file="base.html"/>
+<%block name="content">
+<div class="page-content">
+    <div class="king-page-topbar pl20 pr20">
+        <ul class="breadcrumb king-breadcrumb pl0 bg-transparent">
+            <li>奖学金管理</li>
+            <li class="active">奖学金添加</li>
+        </ul>
+    </div>
+    <div class="bk-panel mb20">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="king-block king-block-bordered">
+                    <div class="king-block-header king-gray-light">
+                        <h3 class="king-block-title">奖学金添加</h3>
+                    </div>
+                    <div class="king-block-content">
+                        <form class="form-horizontal" method="POST">
+                            <div class="form-group">
+                                <label for="inputCount3" class="col-sm-3 control-label">名称：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="name"
+                                           placeholder="输入名称">
+                                </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputCount3" class="col-sm-3 control-label">编号：</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="sn">
+                                </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputCount3" class="col-sm-3 control-label">金额：</label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" id="amount">
+                                </div>
+                                <span class="text-danger mt5 fl">*</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-7 col-sm-offset-3">
+                                    <input type="button" class="king-btn king-success mr10"
+                                           onclick="scholarshipAddSubmit()" value="提交"/>
+                                    <input type="reset" class="king-btn king-default" onclick="backToTeacherList()"
+                                           value="取消"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function scholarshipAddSubmit() {
+        $.ajax({
+            url: site_url + 'scholarship/add/save/',
+            type: 'POST',
+            data: {
+                name: $("#name").val().trim(),
+                amount: $("#amount").val().trim(),
+                sn: $("#sn").val().trim()
+            },
+            success: function (res) {
+                window.location.href = site_url + 'scholarship/page/'
+            }
+        })
+    }
+
+    function backToTeacherList() {
+        window.location.href = site_url + 'scholarship/page/'
+    }
+</script>
+</%block>

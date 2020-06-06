@@ -13,6 +13,8 @@ urlpatterns = patterns(
     (r'^student/add/$', 'student_add_page'),
     (r'^student/add/save/$', 'student_add_save'),
     (r'^student/detail/$', 'student_detail'),
+    (r'^student/detail/scholarship/$', 'student_detail_scholarship'),
+    (r'^student/detail/chat/$', 'student_detail_chat'),
 
     (r'^teacher/page/$', 'teacher_page'),
     (r'^teacher/$', 'teacher_list'),
@@ -25,4 +27,8 @@ urlpatterns = patterns(
 
     (r'^scholarship/page/$', 'scholarship_page'),
     (r'^scholarship/$', 'scholarship_list'),
+    (r'^scholarship/add/page/$', 'scholarship_add_page'),
+    (r'^scholarship/add/save/$', 'scholarship_add_save'),
+    (r'^scholarship/delete/$', 'scholarship_delete'),
+
 )

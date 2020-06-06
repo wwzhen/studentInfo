@@ -7,7 +7,7 @@ from django.db.models import Q
 import constant
 from common.mymako import render_mako_context, render_json
 from student_info.models import Student, Profession, ClassInfo, Dorm, Teacher, Duty, Course, StudentActivityAttachment, \
-    Activity, Discipline, Scholarship
+    Activity, Discipline, Scholarship, ScholarshipStudentAttachment, ChatHistory
 
 
 def overview(request):
@@ -144,6 +144,30 @@ def student_detail(request):
         student_dict['activities'] = student_activities
         return render_mako_context(request, "/home_application/detail.html", {"student": student_dict})
     return render_mako_context(request, "/home_application/detail.html")
+
+
+def student_detail_scholarship(request):
+    student_id = request.GET.get("id")
+    student_scholarship_models = ScholarshipStudentAttachment.objects.filter(delflag=False, student_id=student_id)
+    student_scholarships = list()
+    for s in student_scholarship_models:
+        s_dict = s.to_dict()
+        s_dict['name'] = s.scholarship.name
+        s_dict['amount'] = s.scholarship.amount
+        s_dict['time'] = s_dict['release_time'][0:10]
+        student_scholarships.append(s_dict)
+    return render_json(json.dumps(student_scholarships))
+
+
+def student_detail_chat(request):
+    student_id = request.GET.get("id")
+    chart_models = ChatHistory.objects.filter(delflag=False, student_id=student_id)
+    chart_lists = list()
+    for s in chart_models:
+        s_dict = s.to_dict()
+        s_dict['time'] = s_dict['chatTime'][0:10]
+        chart_lists.append(s_dict)
+    return render_json(json.dumps(chart_lists))
 
 
 def student_delete(request):
@@ -328,3 +352,23 @@ def scholarship_list(request):
         teacher_dict = scholarship.to_dict()
         scholarships.append(teacher_dict)
     return render_json(json.dumps(scholarships))
+
+
+def scholarship_add_page(request):
+    return render_mako_context(request, "/home_application/scholarship_add.html")
+
+
+def scholarship_add_save(request):
+    params = request.POST
+    model_dict = dict()
+    model_dict['name'] = params.get("name")
+    model_dict['amount'] = params.get("amount")
+    model_dict['sn'] = params.get("sn")
+    Scholarship.objects.create(**model_dict)
+    return render_json({"result": True})
+
+
+def scholarship_delete(request):
+    id = request.POST.get('id')
+    Scholarship.objects.filter(id=id).update(delflag=True)
+    return render_json({"result": True})

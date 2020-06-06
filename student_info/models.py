@@ -132,8 +132,11 @@ class Student(BaseModel):
     address = models.CharField(db_column="address", max_length=64, null=True, blank=True, verbose_name=u"家庭住址")
     qq = models.CharField(db_column="qq", null=True, max_length=64, blank=True, verbose_name=u"QQ")
     email = models.CharField(db_column="email", max_length=64, null=True, blank=True, verbose_name=u"email")
+    is_focus = models.BooleanField(db_column="is_focus", default=False, verbose_name=u"是否为重点关注学生")
+    focus_reason = models.TextField(db_column="focus_reason", null=True, blank=True, verbose_name=u"关注原因")
 
 
+# 奖学金
 class ScholarshipStudentAttachment(BaseModel):
     scholarship = models.ForeignKey(Scholarship)
     student = models.ForeignKey(Student)
@@ -149,3 +152,8 @@ class BursaryStudentAttachment(BaseModel):
 class StudentActivityAttachment(BaseModel):
     student = models.ForeignKey(Student)
     activity = models.ForeignKey(Activity)
+
+
+class ChatHistory(BaseModel):
+    student = models.ForeignKey(Student)
+    chatTime = models.DateTimeField(db_column="chart_time", verbose_name=u"谈话时间")
